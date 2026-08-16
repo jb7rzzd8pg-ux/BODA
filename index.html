@@ -7,7 +7,6 @@
     <title>Alejandra & Julian</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -81,7 +80,8 @@
         }
 
         .boton,
-        .boton-fotos {
+        .boton-fotos,
+        .boton-galeria {
             display: inline-block;
             padding: 14px 30px;
             border: 1px solid #8b7166;
@@ -92,7 +92,8 @@
             cursor: pointer;
         }
 
-        .boton:hover {
+        .boton:hover,
+        .boton-galeria:hover {
             background: #4a3b35;
             color: white;
             transform: scale(1.05);
@@ -154,7 +155,8 @@
         }
 
         .historia h2,
-        .recuerdos h2 {
+        .recuerdos h2,
+        .galeria h2 {
             font-size: 42px;
             font-weight: normal;
             margin-bottom: 25px;
@@ -168,7 +170,8 @@
         }
 
         .historia p,
-        .recuerdos p {
+        .recuerdos p,
+        .galeria p {
             max-width: 650px;
             margin: 0 auto 25px;
             font-size: 19px;
@@ -264,8 +267,47 @@
             display: none;
         }
 
-        @keyframes flotar {
+        .galeria {
+            padding: 100px 25px;
+            text-align: center;
+            background: #fffaf5;
+        }
 
+        .boton-galeria {
+            margin: 10px 0 35px;
+            background: #4a3b35;
+            color: white;
+            border: none;
+        }
+
+        .galeria-grid {
+            max-width: 1100px;
+            margin: 20px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .galeria-grid img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(70, 50, 40, 0.15);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .galeria-grid img:hover {
+            transform: scale(1.03);
+        }
+
+        #mensajeGaleria {
+            margin: 15px 0;
+            font-size: 17px;
+        }
+
+        @keyframes flotar {
             0% {
                 transform: translateY(0) rotate(0deg);
             }
@@ -277,11 +319,9 @@
             100% {
                 transform: translateY(0) rotate(0deg);
             }
-
         }
 
         @keyframes aparecer {
-
             from {
                 opacity: 0;
                 transform: translateY(25px);
@@ -291,7 +331,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-
         }
 
         @media (max-width: 600px) {
@@ -318,12 +357,14 @@
             }
 
             .historia h2,
-            .recuerdos h2 {
+            .recuerdos h2,
+            .galeria h2 {
                 font-size: 34px;
             }
 
             .historia p,
-            .recuerdos p {
+            .recuerdos p,
+            .galeria p {
                 font-size: 17px;
             }
 
@@ -335,8 +376,11 @@
                 font-size: 27px;
             }
 
+            .galeria-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
         }
-
     </style>
 </head>
 
@@ -383,7 +427,6 @@
         </div>
 
     </section>
-
 
     <section id="historia" class="historia">
 
@@ -448,7 +491,6 @@
 
     </section>
 
-
     <section class="recuerdos">
 
         <div class="recuerdos-icono">
@@ -495,16 +537,46 @@
 
     </section>
 
+    <section class="galeria">
+
+        <div class="recuerdos-icono">
+            💕
+        </div>
+
+        <h2>
+            Galería de recuerdos
+        </h2>
+
+        <div class="linea"></div>
+
+        <p>
+            Mira los momentos que nuestros invitados
+            han compartido.
+        </p>
+
+        <button
+            class="boton-galeria"
+            id="cargarGaleria">
+            📸 Ver recuerdos
+        </button>
+
+        <div id="mensajeGaleria"></div>
+
+        <div
+            id="galeriaGrid"
+            class="galeria-grid">
+        </div>
+
+    </section>
 
     <script>
-
-        /* =========================
-           CONFIGURACIÓN CLOUDINARY
-        ========================= */
 
         const CLOUD_NAME = "iob4klqb";
 
         const UPLOAD_PRESET = "mwwydesd";
+
+        const WORKER_URL =
+            "https://galeria-boda.n776bkp7jc.workers.dev/gallery";
 
 
         /* =========================
@@ -536,7 +608,6 @@
 
                     return;
                 }
-
 
                 mensaje.textContent =
                     "Subiendo foto... ⏳";
@@ -586,9 +657,117 @@
                         "¡Foto subida correctamente! 📸❤️";
 
 
-                    console.log(
-                        "Foto subida:",
-                        resultado.secure_url
+                } catch (error) {
+
+                    console.error(error);
+
+                    mensaje.textContent =
+                        "No se pudo subir la foto. Inténtalo de nuevo.";
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           GALERÍA
+        ========================= */
+
+        const botonGaleria =
+            document.getElementById("cargarGaleria");
+
+        const galeriaGrid =
+            document.getElementById("galeriaGrid");
+
+        const mensajeGaleria =
+            document.getElementById("mensajeGaleria");
+
+
+        botonGaleria.addEventListener(
+            "click",
+            async function () {
+
+                mensajeGaleria.textContent =
+                    "Cargando recuerdos... 📸";
+
+                galeriaGrid.innerHTML = "";
+
+
+                try {
+
+                    const respuesta =
+                        await fetch(
+                            WORKER_URL,
+                            {
+                                method: "GET",
+                                cache: "no-store"
+                            }
+                        );
+
+
+                    if (!respuesta.ok) {
+                        throw new Error(
+                            "El Worker no respondió correctamente."
+                        );
+                    }
+
+
+                    const datos =
+                        await respuesta.json();
+
+
+                    if (
+                        !datos.images ||
+                        datos.images.length === 0
+                    ) {
+
+                        mensajeGaleria.textContent =
+                            "Todavía no hay fotos compartidas. ❤️";
+
+                        return;
+                    }
+
+
+                    mensajeGaleria.textContent =
+                        `${datos.images.length} recuerdo(s) compartido(s) 📸`;
+
+
+                    datos.images.forEach(
+                        function (imagen) {
+
+                            const img =
+                                document.createElement("img");
+
+
+                            img.src =
+                                imagen.url;
+
+
+                            img.alt =
+                                "Recuerdo de la boda";
+
+
+                            img.loading =
+                                "lazy";
+
+
+                            img.addEventListener(
+                                "click",
+                                function () {
+
+                                    window.open(
+                                        imagen.url,
+                                        "_blank"
+                                    );
+
+                                }
+                            );
+
+
+                            galeriaGrid.appendChild(img);
+
+                        }
                     );
 
 
@@ -596,8 +775,8 @@
 
                     console.error(error);
 
-                    mensaje.textContent =
-                        "No se pudo subir la foto. Inténtalo de nuevo.";
+                    mensajeGaleria.textContent =
+                        "No se pudo cargar la galería. Inténtalo nuevamente.";
 
                 }
 
@@ -625,23 +804,6 @@
 
 
             if (diferencia <= 0) {
-
-                document.getElementById(
-                    "dias"
-                ).textContent = "0";
-
-                document.getElementById(
-                    "horas"
-                ).textContent = "0";
-
-                document.getElementById(
-                    "minutos"
-                ).textContent = "0";
-
-                document.getElementById(
-                    "segundos"
-                ).textContent = "0";
-
                 return;
             }
 
@@ -704,7 +866,7 @@
 
 
         /* =========================
-           MOVIMIENTO DE FLORES
+           FLORES
         ========================= */
 
         const flores =
