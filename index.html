@@ -1,946 +1,1837 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Alejandra & Julian</title>
+<title>Vanessa & Julian</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        html {
-            scroll-behavior: smooth;
-        }
+html{
+    scroll-behavior:smooth;
+}
 
-        body {
-            font-family: Georgia, serif;
-            color: #4a3b35;
-            background: #fffaf5;
-        }
+body{
+    font-family:Georgia,"Times New Roman",serif;
+    color:#493b35;
+    background:#fffaf6;
+    overflow-x:hidden;
+}
 
-        .portada {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-            background: linear-gradient(135deg, #fffaf5, #f5e9df);
-        }
+section{
+    position:relative;
+    padding:100px 20px;
+}
 
-        .contenido {
-            position: relative;
-            z-index: 10;
-            padding: 30px;
-            animation: aparecer 2s ease;
-        }
+h1,h2,h3{
+    font-weight:normal;
+}
 
-        .pequeno {
-            font-size: 17px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
+p{
+    line-height:1.8;
+}
 
-        h1 {
-            font-size: clamp(42px, 8vw, 85px);
-            font-weight: normal;
-            line-height: 1.05;
-            margin-bottom: 20px;
-        }
+/* =========================
+   BOTÓN DE MÚSICA
+========================= */
 
-        .foto {
-            width: 240px;
-            height: 240px;
-            object-fit: cover;
-            border-radius: 14px;
-            border: 3px solid white;
-            padding: 5px;
-            background: white;
-            box-shadow: 0 15px 35px rgba(70, 50, 40, 0.20);
-            margin: 15px 0 28px;
-        }
+.music-button{
+    position:fixed;
+    right:20px;
+    top:20px;
+    z-index:9999;
+    width:52px;
+    height:52px;
+    border:none;
+    border-radius:50%;
+    background:#493b35;
+    color:white;
+    font-size:21px;
+    cursor:pointer;
+    box-shadow:
+        0 10px 20px rgba(0,0,0,.2),
+        0 0 0 5px rgba(255,255,255,.35);
+    transition:.3s;
+}
 
-        .frase {
-            font-size: 20px;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
+.music-button:hover{
+    transform:scale(1.1) rotate(10deg);
+}
 
-        .fecha {
-            font-size: 18px;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-        }
 
-        .boton,
-        .boton-fotos,
-        .boton-galeria {
-            display: inline-block;
-            padding: 14px 30px;
-            border: 1px solid #8b7166;
-            border-radius: 30px;
-            color: #4a3b35;
-            text-decoration: none;
-            transition: 0.3s;
-            cursor: pointer;
-        }
+/* =========================
+   PORTADA 3D
+========================= */
 
-        .boton:hover,
-        .boton-galeria:hover {
-            background: #4a3b35;
-            color: white;
-            transform: scale(1.05);
-        }
+.portada{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    overflow:hidden;
 
-        .flor {
-            position: absolute;
-            font-size: 55px;
-            opacity: 0.75;
-            animation: flotar 6s ease-in-out infinite;
-            user-select: none;
-            pointer-events: none;
-        }
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255,255,255,.95),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(210,180,160,.25),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #fffaf6,
+            #ead9cd
+        );
 
-        .flor1 {
-            top: 8%;
-            left: 8%;
-        }
+    perspective:1200px;
+}
 
-        .flor2 {
-            top: 15%;
-            right: 10%;
-            font-size: 70px;
-            animation-delay: 1s;
-        }
+.portada::before{
+    content:"";
+    position:absolute;
+    inset:18px;
 
-        .flor3 {
-            bottom: 10%;
-            left: 12%;
-            font-size: 65px;
-            animation-delay: 2s;
-        }
+    border:1px solid rgba(73,59,53,.25);
 
-        .flor4 {
-            bottom: 15%;
-            right: 8%;
-            animation-delay: 3s;
-        }
+    box-shadow:
+        inset 0 0 50px rgba(255,255,255,.7),
+        0 0 50px rgba(80,50,40,.08);
 
-        .flor5 {
-            top: 45%;
-            left: 3%;
-            font-size: 35px;
-            animation-delay: 1.5s;
-        }
+    pointer-events:none;
+}
 
-        .flor6 {
-            top: 40%;
-            right: 4%;
-            font-size: 40px;
-            animation-delay: 2.5s;
-        }
+.portada-contenido{
+    position:relative;
+    z-index:5;
 
-        .historia {
-            min-height: 100vh;
-            padding: 100px 25px;
-            text-align: center;
-            background: #fffaf5;
-        }
+    max-width:900px;
+    padding:40px;
 
-        .historia h2,
-        .recuerdos h2,
-        .galeria h2 {
-            font-size: 42px;
-            font-weight: normal;
-            margin-bottom: 25px;
-        }
+    transform-style:preserve-3d;
 
-        .linea {
-            width: 70px;
-            height: 2px;
-            background: #8b7166;
-            margin: 0 auto 30px;
-        }
+    animation:
+        entrada3D 1.7s ease;
+}
 
-        .historia p,
-        .recuerdos p,
-        .galeria p {
-            max-width: 650px;
-            margin: 0 auto 25px;
-            font-size: 19px;
-            line-height: 1.8;
-        }
+.pre-titulo{
+    letter-spacing:7px;
+    text-transform:uppercase;
+    font-size:14px;
+    margin-bottom:25px;
 
-        .corazon {
-            font-size: 35px;
-            margin-bottom: 30px;
-        }
+    transform:translateZ(40px);
+}
 
-        .contador {
-            margin-top: 60px;
-        }
+.portada h1{
+    font-size:clamp(55px,10vw,110px);
+    line-height:.9;
+    margin-bottom:35px;
 
-        .contador h3 {
-            font-size: 25px;
-            font-weight: normal;
-            margin-bottom: 30px;
-        }
+    transform:translateZ(100px);
 
-        .reloj {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+    color:#493b35;
 
-        .tiempo {
-            width: 90px;
-            padding: 18px 10px;
-            background: #f5e9df;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(70, 50, 40, 0.10);
-        }
+    text-shadow:
+        1px 1px 0 #d6c2b6,
+        2px 2px 0 #c9b2a4,
+        3px 3px 0 #b99d8d,
+        10px 15px 25px rgba(60,40,30,.18);
+}
 
-        .numero {
-            display: block;
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
+.ampersand{
+    font-size:.55em;
+    font-style:italic;
+}
 
-        .texto {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+.foto-contenedor{
+    position:relative;
 
-        .recuerdos {
-            min-height: 80vh;
-            padding: 100px 25px;
-            text-align: center;
-            background: linear-gradient(135deg, #f5e9df, #fffaf5);
-        }
+    display:inline-block;
 
-        .recuerdos-icono {
-            font-size: 55px;
-            margin-bottom: 20px;
-        }
+    transform-style:preserve-3d;
 
-        .tarjeta-fotos {
-            max-width: 600px;
-            margin: 40px auto 0;
-            padding: 40px 25px;
-            background: rgba(255, 255, 255, 0.75);
-            border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(70, 50, 40, 0.12);
-        }
+    margin-bottom:30px;
 
-        .tarjeta-fotos h3 {
-            font-size: 25px;
-            font-weight: normal;
-            margin-bottom: 15px;
-        }
+    transition:
+        transform .3s ease;
+}
 
-        .boton-fotos {
-            margin-top: 20px;
-            background: #4a3b35;
-            color: white;
-            border: none;
-        }
+.foto-contenedor::before{
+    content:"";
 
-        .boton-fotos:hover {
-            transform: scale(1.05);
-        }
+    position:absolute;
 
-        #mensaje {
-            margin-top: 20px;
-            font-size: 16px;
-        }
+    width:240px;
+    height:240px;
 
-        #fotoInput {
-            display: none;
-        }
+    left:10px;
+    top:15px;
 
-        /* GALERÍA */
+    border-radius:50%;
 
-        .galeria {
-            padding: 100px 25px;
-            text-align: center;
-            background: #fffaf5;
-        }
+    background:#c9b2a4;
 
-        .boton-galeria {
-            margin: 10px 0 35px;
-            background: #4a3b35;
-            color: white;
-            border: none;
-        }
+    transform:translateZ(-30px);
 
-        .galeria-grid {
-            max-width: 1100px;
-            margin: 20px auto 0;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
+    filter:blur(1px);
 
-        .galeria-grid img {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(70, 50, 40, 0.15);
-            transition: 0.3s;
-            cursor: pointer;
-        }
+    opacity:.7;
+}
 
-        .galeria-grid img:hover {
-            transform: scale(1.03);
-        }
+.foto-principal{
+    position:relative;
 
-        #mensajeGaleria {
-            margin: 15px 0;
-            font-size: 17px;
-        }
+    width:260px;
+    height:260px;
 
-        @keyframes flotar {
-            0% {
-                transform: translateY(0) rotate(0deg);
-            }
+    object-fit:cover;
 
-            50% {
-                transform: translateY(-20px) rotate(8deg);
-            }
+    border-radius:50%;
 
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-        }
+    padding:7px;
 
-        @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
+    background:white;
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    border:1px solid #b59a8b;
 
-        @media (max-width: 600px) {
+    box-shadow:
+        0 15px 20px rgba(70,50,40,.12),
+        0 30px 60px rgba(70,50,40,.25);
 
-            .foto {
-                width: 190px;
-                height: 190px;
-            }
+    transform:translateZ(70px);
+}
 
-            .flor {
-                font-size: 40px;
-            }
+.frase-principal{
+    font-size:20px;
+    font-style:italic;
+    margin-bottom:20px;
 
-            .flor2 {
-                font-size: 50px;
-            }
+    transform:translateZ(50px);
+}
 
-            h1 {
-                font-size: 52px;
-            }
+.fecha-principal{
+    letter-spacing:5px;
+    font-size:16px;
+    margin-bottom:35px;
 
-            .frase {
-                font-size: 18px;
-            }
+    transform:translateZ(40px);
+}
 
-            .historia h2,
-            .recuerdos h2,
-            .galeria h2 {
-                font-size: 34px;
-            }
+.boton{
+    display:inline-block;
 
-            .historia p,
-            .recuerdos p,
-            .galeria p {
-                font-size: 17px;
-            }
+    padding:14px 30px;
 
-            .tiempo {
-                width: 75px;
-            }
+    border:1px solid #7c675d;
+    border-radius:30px;
 
-            .numero {
-                font-size: 27px;
-            }
+    color:#493b35;
+    text-decoration:none;
 
-            .galeria-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-        }
-    </style>
+    background:rgba(255,255,255,.25);
+
+    box-shadow:
+        0 8px 20px rgba(60,40,30,.1);
+
+    transform:translateZ(50px);
+
+    transition:.3s;
+}
+
+.boton:hover{
+    background:#493b35;
+    color:white;
+
+    transform:
+        translateZ(70px)
+        translateY(-4px);
+}
+
+
+/* =========================
+   FLORES 3D
+========================= */
+
+.flor{
+    position:absolute;
+
+    opacity:.55;
+
+    font-size:50px;
+
+    transform-style:preserve-3d;
+
+    filter:drop-shadow(
+        8px 12px 8px rgba(50,30,20,.15)
+    );
+
+    animation:
+        flotar3D 7s ease-in-out infinite;
+}
+
+.flor1{
+    top:8%;
+    left:7%;
+}
+
+.flor2{
+    top:15%;
+    right:8%;
+    font-size:65px;
+    animation-delay:1s;
+}
+
+.flor3{
+    bottom:10%;
+    left:10%;
+    font-size:60px;
+    animation-delay:2s;
+}
+
+.flor4{
+    bottom:12%;
+    right:7%;
+    animation-delay:3s;
+}
+
+.flor5{
+    top:45%;
+    left:3%;
+    font-size:30px;
+}
+
+.flor6{
+    top:42%;
+    right:3%;
+    font-size:35px;
+}
+
+
+/* =========================
+   SECCIONES
+========================= */
+
+.seccion-clara{
+    background:#fffaf6;
+}
+
+.seccion-beige{
+    background:#f5e8de;
+}
+
+.contenedor{
+    max-width:1000px;
+    margin:auto;
+    text-align:center;
+}
+
+.titulo{
+    font-size:46px;
+    margin-bottom:20px;
+
+    text-shadow:
+        2px 3px 5px rgba(70,50,40,.15);
+}
+
+.subtitulo{
+    max-width:650px;
+    margin:0 auto 40px;
+    font-size:18px;
+}
+
+.linea{
+    width:70px;
+    height:1px;
+    background:#8b7166;
+    margin:0 auto 30px;
+}
+
+
+/* =========================
+   HISTORIA 3D
+========================= */
+
+.novios-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        100px
+        1fr;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-top:60px;
+
+    perspective:1000px;
+}
+
+.persona{
+    text-align:center;
+
+    padding:35px 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.95),
+            rgba(245,230,220,.75)
+        );
+
+    border-radius:25px;
+
+    box-shadow:
+        10px 15px 30px rgba(70,50,40,.12),
+        inset 0 1px 0 white;
+
+    transform-style:preserve-3d;
+
+    transition:
+        transform .4s ease,
+        box-shadow .4s ease;
+}
+
+.persona:hover{
+    transform:
+        rotateY(7deg)
+        translateY(-8px);
+
+    box-shadow:
+        15px 25px 45px rgba(70,50,40,.2);
+}
+
+.persona h3{
+    font-size:30px;
+    margin-bottom:12px;
+
+    transform:translateZ(30px);
+}
+
+.persona p{
+    font-size:16px;
+
+    transform:translateZ(20px);
+}
+
+.corazon-grande{
+    font-size:60px;
+
+    color:#8b6256;
+
+    text-shadow:
+        3px 4px 0 #d7bfb3,
+        8px 12px 15px rgba(60,40,30,.2);
+
+    animation:
+        latido 2s infinite ease-in-out;
+}
+
+
+/* =========================
+   CONTADOR 3D
+========================= */
+
+.contador{
+    margin-top:65px;
+}
+
+.contador h3{
+    font-size:28px;
+    margin-bottom:25px;
+}
+
+.reloj{
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    perspective:1000px;
+}
+
+.tiempo{
+    width:105px;
+
+    padding:22px 10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #eadbd2
+        );
+
+    border-radius:18px;
+
+    box-shadow:
+        8px 12px 25px rgba(60,40,30,.15);
+
+    transform:
+        rotateX(4deg)
+        translateZ(15px);
+
+    transition:.3s;
+}
+
+.tiempo:hover{
+    transform:
+        rotateX(0)
+        translateY(-8px)
+        scale(1.04);
+}
+
+.numero{
+    display:block;
+
+    font-size:36px;
+
+    margin-bottom:7px;
+
+    text-shadow:
+        2px 3px 4px rgba(60,40,30,.15);
+}
+
+.texto{
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+}
+
+
+/* =========================
+   FOTOS
+========================= */
+
+.tarjeta-fotos{
+    max-width:650px;
+
+    margin:40px auto;
+
+    padding:40px 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f0e1d8
+        );
+
+    border-radius:25px;
+
+    box-shadow:
+        10px 15px 40px rgba(60,40,30,.15);
+
+    transform:
+        perspective(1000px)
+        rotateX(2deg);
+
+    transition:.4s;
+}
+
+.tarjeta-fotos:hover{
+    transform:
+        perspective(1000px)
+        rotateX(0)
+        translateY(-5px);
+}
+
+.tarjeta-fotos h3{
+    font-size:28px;
+
+    margin-bottom:15px;
+}
+
+#fotoInput{
+    display:none;
+}
+
+.boton-fotos,
+.boton-galeria{
+
+    display:inline-block;
+
+    padding:14px 28px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#493b35;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-family:inherit;
+
+    font-size:15px;
+
+    box-shadow:
+        0 8px 20px rgba(60,40,30,.2);
+}
+
+.boton-fotos:hover,
+.boton-galeria:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.03);
+
+    box-shadow:
+        0 14px 25px rgba(60,40,30,.25);
+}
+
+#mensaje,
+#mensajeGaleria{
+    margin-top:20px;
+}
+
+
+/* =========================
+   GALERÍA 3D
+========================= */
+
+.galeria-grid{
+
+    max-width:1100px;
+
+    margin:35px auto 0;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:20px;
+
+    perspective:1200px;
+}
+
+.galeria-grid img{
+
+    width:100%;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+    cursor:pointer;
+
+    border:5px solid white;
+
+    box-shadow:
+        8px 12px 25px rgba(60,40,30,.2);
+
+    transition:
+        transform .4s ease,
+        box-shadow .4s ease;
+}
+
+.galeria-grid img:hover{
+
+    transform:
+        rotateY(8deg)
+        rotateX(5deg)
+        translateY(-10px)
+        scale(1.03);
+
+    box-shadow:
+        18px 25px 45px rgba(60,40,30,.25);
+}
+
+
+/* =========================
+   MENSAJE FINAL
+========================= */
+
+.mensaje-final{
+
+    max-width:700px;
+
+    margin:auto;
+
+    text-align:center;
+
+    transform-style:preserve-3d;
+}
+
+.mensaje-final .corazon{
+
+    font-size:65px;
+
+    margin-bottom:25px;
+
+    color:#8b6256;
+
+    text-shadow:
+        3px 4px 0 #d7bfb3,
+        10px 15px 20px rgba(60,40,30,.2);
+
+    animation:
+        latido 2s infinite ease-in-out;
+}
+
+.mensaje-final p{
+
+    font-size:19px;
+
+    font-style:italic;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    padding:50px 20px;
+
+    text-align:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #493b35,
+            #302521
+        );
+
+    color:white;
+
+    box-shadow:
+        inset 0 10px 30px rgba(0,0,0,.2);
+}
+
+footer h3{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+    text-shadow:
+        2px 3px 5px rgba(0,0,0,.4);
+}
+
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+.revelar{
+
+    opacity:0;
+
+    transform:
+        translateY(45px)
+        rotateX(5deg);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.revelar.visible{
+
+    opacity:1;
+
+    transform:
+        translateY(0)
+        rotateX(0);
+}
+
+@keyframes entrada3D{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            perspective(1000px)
+            rotateX(20deg)
+            translateY(50px)
+            translateZ(-100px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            perspective(1000px)
+            rotateX(0)
+            translateY(0)
+            translateZ(0);
+    }
+}
+
+@keyframes flotar3D{
+
+    0%,100%{
+
+        transform:
+            translateY(0)
+            rotateX(0)
+            rotateY(0)
+            rotateZ(0);
+    }
+
+    50%{
+
+        transform:
+            translateY(-25px)
+            rotateX(10deg)
+            rotateY(12deg)
+            rotateZ(8deg);
+    }
+}
+
+@keyframes latido{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.08);
+    }
+}
+
+
+/* =========================
+   CELULAR
+========================= */
+
+@media(max-width:700px){
+
+    section{
+        padding:80px 18px;
+    }
+
+    .portada::before{
+        inset:12px;
+    }
+
+    .foto-principal{
+        width:200px;
+        height:200px;
+    }
+
+    .foto-contenedor::before{
+        width:185px;
+        height:185px;
+    }
+
+    .portada h1{
+        font-size:55px;
+    }
+
+    .novios-grid{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .corazon-grande{
+        order:2;
+    }
+
+    .titulo{
+        font-size:37px;
+    }
+
+    .galeria-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+        gap:10px;
+    }
+
+    .tiempo{
+
+        width:75px;
+
+        padding:16px 5px;
+    }
+
+    .numero{
+        font-size:27px;
+    }
+
+    .flor{
+        font-size:35px;
+    }
+
+    .pre-titulo{
+        letter-spacing:4px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <section class="portada">
+<!-- MÚSICA -->
 
-        <div class="flor flor1">🌸</div>
-        <div class="flor flor2">🌷</div>
-        <div class="flor flor3">🌺</div>
-        <div class="flor flor4">🌸</div>
-        <div class="flor flor5">🌼</div>
-        <div class="flor flor6">🌿</div>
+<button
+class="music-button"
+id="musicButton">
+🎵
+</button>
 
-        <div class="contenido">
+<audio
+id="musica"
+loop>
+</audio>
 
-            <div class="pequeno">
-                Nuestra boda
-            </div>
 
-            <h1>
-                Alejandra<br>
-                & Julian
-            </h1>
+<!-- =========================
+     PORTADA
+========================= -->
 
-            <img
-                src="pareja.jpeg"
-                alt="Alejandra y Julian"
-                class="foto"
-            >
+<section class="portada">
 
-            <p class="frase">
-                El comienzo de nuestra historia para siempre
-            </p>
+<div class="flor flor1">🌸</div>
+<div class="flor flor2">🌷</div>
+<div class="flor flor3">🌺</div>
+<div class="flor flor4">🌸</div>
+<div class="flor flor5">🌼</div>
+<div class="flor flor6">🌿</div>
 
-            <p class="fecha">
-                5 de diciembre de 2026
-            </p>
 
-            <a href="#historia" class="boton">
-                Ver nuestra historia
-            </a>
+<div
+class="portada-contenido"
+id="portada3D">
 
-        </div>
+<div class="pre-titulo">
+Nuestra historia
+</div>
 
-    </section>
 
+<h1>
 
-    <section id="historia" class="historia">
+Vanessa
 
-        <div class="corazon">
-            ♡
-        </div>
+<span class="ampersand">
+&
+</span>
 
-        <h2>
-            Nuestra historia
-        </h2>
+Julian
 
-        <div class="linea"></div>
+</h1>
 
-        <p>
-            Dos caminos que se encontraron,
-            dos corazones que decidieron caminar
-            juntos y comenzar una nueva historia.
-        </p>
 
-        <p>
-            Hoy queremos compartir este momento
-            tan especial con las personas que más
-            queremos.
-        </p>
+<div class="foto-contenedor">
 
-        <p>
-            Gracias por formar parte de
-            nuestra historia.
-        </p>
+<img
+src="pareja.jpeg"
+alt="Vanessa y Julian"
+class="foto-principal"
+>
 
-        <div class="contador">
+</div>
 
-            <h3>
-                Faltan...
-            </h3>
 
-            <div class="reloj">
+<p class="frase-principal">
+El comienzo de nuestra historia para siempre
+</p>
 
-                <div class="tiempo">
-                    <span id="dias" class="numero">0</span>
-                    <span class="texto">Días</span>
-                </div>
 
-                <div class="tiempo">
-                    <span id="horas" class="numero">0</span>
-                    <span class="texto">Horas</span>
-                </div>
+<p class="fecha-principal">
+5 DE DICIEMBRE DE 2026
+</p>
 
-                <div class="tiempo">
-                    <span id="minutos" class="numero">0</span>
-                    <span class="texto">Minutos</span>
-                </div>
 
-                <div class="tiempo">
-                    <span id="segundos" class="numero">0</span>
-                    <span class="texto">Segundos</span>
-                </div>
+<a
+href="#historia"
+class="boton">
 
-            </div>
+Descubrir nuestra historia
 
-        </div>
+</a>
 
-    </section>
+</div>
 
+</section>
 
-    <section class="recuerdos">
 
-        <div class="recuerdos-icono">
-            📸
-        </div>
+<!-- =========================
+     HISTORIA
+========================= -->
 
-        <h2>
-            Comparte tus recuerdos
-        </h2>
+<section
+id="historia"
+class="seccion-clara revelar">
 
-        <div class="linea"></div>
+<div class="contenedor">
 
-        <p>
-            Queremos guardar todos los momentos
-            especiales de este día.
-        </p>
 
-        <div class="tarjeta-fotos">
+<h2 class="titulo">
+Nuestra historia
+</h2>
 
-            <h3>
-                📷 Comparte tus fotos
-            </h3>
 
-            <p>
-                Selecciona una foto de tu dispositivo
-                para compartirla con los novios.
-            </p>
+<div class="linea"></div>
 
-            <input
-                type="file"
-                id="fotoInput"
-                accept="image/*"
-            >
 
-            <label
-                for="fotoInput"
-                class="boton-fotos">
-                📸 Seleccionar foto
-            </label>
+<p class="subtitulo">
 
-            <div id="mensaje"></div>
+Dos caminos que se encontraron,
+dos corazones que decidieron
+caminar juntos y comenzar
+una nueva historia.
 
-        </div>
+</p>
 
-    </section>
 
+<div class="novios-grid">
 
-    <section class="galeria">
 
-        <div class="recuerdos-icono">
-            💕
-        </div>
+<div class="persona">
 
-        <h2>
-            Galería de recuerdos
-        </h2>
+<h3>
+Vanessa
+</h3>
 
-        <div class="linea"></div>
+<p>
 
-        <p>
-            Mira los momentos que nuestros invitados
-            han compartido.
-        </p>
+Una vida llena de sueños,
+momentos especiales
+y mucho amor.
 
-        <button
-            class="boton-galeria"
-            id="cargarGaleria">
-            📸 Ver recuerdos
-        </button>
+</p>
 
-        <div id="mensajeGaleria"></div>
+</div>
 
-        <div
-            id="galeriaGrid"
-            class="galeria-grid">
-        </div>
 
-    </section>
+<div class="corazon-grande">
+♡
+</div>
 
 
-    <script>
+<div class="persona">
 
-        /* =========================
-           CLOUDINARY
-        ========================= */
+<h3>
+Julian
+</h3>
 
-        const CLOUD_NAME = "iob4klqb";
+<p>
 
-        const UPLOAD_PRESET = "mwwydesd";
+Una nueva etapa que comienza
+junto a la persona indicada.
 
-        const WORKER_URL =
-            "https://galeria-boda.n776bkp7jc.workers.dev/gallery";
+</p>
 
+</div>
 
-        /* =========================
-           SUBIR FOTO
-        ========================= */
 
-        const fotoInput =
-            document.getElementById("fotoInput");
+</div>
 
-        const mensaje =
-            document.getElementById("mensaje");
 
+<!-- CONTADOR -->
 
-        fotoInput.addEventListener(
-            "change",
-            async function () {
+<div class="contador">
 
-                const archivo =
-                    this.files[0];
+<h3>
+Faltan...
+</h3>
 
-                if (!archivo) {
-                    return;
-                }
 
-                if (!archivo.type.startsWith("image/")) {
+<div class="reloj">
 
-                    mensaje.textContent =
-                        "Por favor selecciona una imagen.";
 
-                    return;
-                }
+<div class="tiempo">
 
-                mensaje.textContent =
-                    "Subiendo foto... ⏳";
+<span
+id="dias"
+class="numero">
+0
+</span>
 
+<span class="texto">
+Días
+</span>
 
-                const datos =
-                    new FormData();
+</div>
 
-                datos.append(
-                    "file",
-                    archivo
-                );
 
-                datos.append(
-                    "upload_preset",
-                    UPLOAD_PRESET
-                );
+<div class="tiempo">
 
+<span
+id="horas"
+class="numero">
+0
+</span>
 
-                try {
+<span class="texto">
+Horas
+</span>
 
-                    const respuesta =
-                        await fetch(
-                            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-                            {
-                                method: "POST",
-                                body: datos
-                            }
-                        );
+</div>
 
 
-                    const resultado =
-                        await respuesta.json();
+<div class="tiempo">
 
+<span
+id="minutos"
+class="numero">
+0
+</span>
 
-                    if (!respuesta.ok) {
+<span class="texto">
+Minutos
+</span>
 
-                        throw new Error(
-                            resultado.error?.message ||
-                            "No se pudo subir la foto."
-                        );
+</div>
 
-                    }
 
+<div class="tiempo">
 
-                    mensaje.textContent =
-                        "¡Foto subida correctamente! 📸❤️";
+<span
+id="segundos"
+class="numero">
+0
+</span>
 
+<span class="texto">
+Segundos
+</span>
 
-                    console.log(
-                        "Foto subida:",
-                        resultado.secure_url
-                    );
+</div>
 
 
-                } catch (error) {
+</div>
 
-                    console.error(error);
+</div>
 
-                    mensaje.textContent =
-                        "No se pudo subir la foto. Inténtalo de nuevo.";
+</div>
 
-                }
+</section>
 
-            }
-        );
 
+<!-- =========================
+     COMPARTIR FOTOS
+========================= -->
 
-        /* =========================
-           GALERÍA
-        ========================= */
+<section
+class="seccion-beige revelar">
 
-        const botonGaleria =
-            document.getElementById("cargarGaleria");
+<div class="contenedor">
 
-        const galeriaGrid =
-            document.getElementById("galeriaGrid");
 
-        const mensajeGaleria =
-            document.getElementById("mensajeGaleria");
+<h2 class="titulo">
+Comparte tus recuerdos
+</h2>
 
 
-        botonGaleria.addEventListener(
-            "click",
-            async function () {
+<div class="linea"></div>
 
-                mensajeGaleria.textContent =
-                    "Cargando recuerdos... 📸";
 
-                galeriaGrid.innerHTML = "";
+<p class="subtitulo">
 
+Queremos guardar todos los momentos
+especiales de este día. ❤️
 
-                try {
+</p>
 
-                    const respuesta =
-                        await fetch(
-                            WORKER_URL,
-                            {
-                                method: "GET",
-                                cache: "no-store"
-                            }
-                        );
 
+<div class="tarjeta-fotos">
 
-                    if (!respuesta.ok) {
 
-                        throw new Error(
-                            "El Worker no respondió correctamente."
-                        );
+<h3>
+📸 Comparte una foto
+</h3>
 
-                    }
 
+<p>
 
-                    const datos =
-                        await respuesta.json();
+Selecciona una foto de tu dispositivo
+para compartirla con Vanessa y Julian.
 
+</p>
 
-                    if (
-                        !datos.images ||
-                        datos.images.length === 0
-                    ) {
 
-                        mensajeGaleria.textContent =
-                            "Todavía no hay fotos compartidas. ❤️";
+<br>
 
-                        return;
-                    }
 
+<input
+type="file"
+id="fotoInput"
+accept="image/*"
+>
 
-                    mensajeGaleria.textContent =
-                        `${datos.images.length} recuerdo(s) compartido(s) 📸`;
 
+<label
+for="fotoInput"
+class="boton-fotos">
 
-                    datos.images.forEach(
-                        function (imagen) {
+Seleccionar foto
 
-                            const img =
-                                document.createElement("img");
+</label>
 
 
-                            img.src =
-                                imagen.url;
+<div id="mensaje"></div>
 
 
-                            img.alt =
-                                "Recuerdo de la boda";
+</div>
 
+</div>
 
-                            img.loading =
-                                "lazy";
+</section>
 
 
-                            img.addEventListener(
-                                "click",
-                                function () {
+<!-- =========================
+     GALERÍA
+========================= -->
 
-                                    window.open(
-                                        imagen.url,
-                                        "_blank"
-                                    );
+<section
+class="seccion-clara revelar">
 
-                                }
-                            );
+<div class="contenedor">
 
 
-                            galeriaGrid.appendChild(img);
+<h2 class="titulo">
+Galería de recuerdos
+</h2>
 
-                        }
-                    );
 
+<div class="linea"></div>
 
-                } catch (error) {
 
-                    console.error(error);
+<p class="subtitulo">
 
-                    mensajeGaleria.textContent =
-                        "No se pudo cargar la galería. Inténtalo nuevamente.";
+Mira los momentos que nuestros invitados
+han compartido.
 
-                }
+</p>
 
-            }
-        );
 
+<button
+class="boton-galeria"
+id="cargarGaleria">
 
-        /* =========================
-           CONTADOR
-        ========================= */
+📸 Ver recuerdos
 
-        const fechaBoda =
-            new Date(
-                "December 5, 2026 00:00:00"
-            ).getTime();
+</button>
 
 
-        function actualizarContador() {
+<div id="mensajeGaleria"></div>
 
-            const ahora =
-                new Date().getTime();
 
-            const diferencia =
-                fechaBoda - ahora;
+<div
+id="galeriaGrid"
+class="galeria-grid">
 
+</div>
 
-            if (diferencia <= 0) {
 
-                document.getElementById(
-                    "dias"
-                ).textContent = "0";
+</div>
 
-                document.getElementById(
-                    "horas"
-                ).textContent = "0";
+</section>
 
-                document.getElementById(
-                    "minutos"
-                ).textContent = "0";
 
-                document.getElementById(
-                    "segundos"
-                ).textContent = "0";
+<!-- =========================
+     MENSAJE FINAL
+========================= -->
 
-                return;
-            }
+<section
+class="seccion-beige revelar">
 
+<div class="mensaje-final">
 
-            const dias =
-                Math.floor(
-                    diferencia /
-                    (1000 * 60 * 60 * 24)
-                );
 
+<div class="corazon">
+♡
+</div>
 
-            const horas =
-                Math.floor(
-                    (diferencia /
-                    (1000 * 60 * 60)) % 24
-                );
 
+<h2 class="titulo">
+Gracias por acompañarnos
+</h2>
 
-            const minutos =
-                Math.floor(
-                    (diferencia /
-                    (1000 * 60)) % 60
-                );
 
+<div class="linea"></div>
 
-            const segundos =
-                Math.floor(
-                    (diferencia / 1000) % 60
-                );
 
+<p>
 
-            document.getElementById(
-                "dias"
-            ).textContent = dias;
+“Hay momentos que se convierten
+en recuerdos y personas que hacen
+que esos recuerdos sean inolvidables.”
 
+</p>
 
-            document.getElementById(
-                "horas"
-            ).textContent = horas;
 
+<br>
 
-            document.getElementById(
-                "minutos"
-            ).textContent = minutos;
 
+<p>
 
-            document.getElementById(
-                "segundos"
-            ).textContent = segundos;
+Con cariño,<br>
 
-        }
+<strong>
+Vanessa & Julian
+</strong>
 
+</p>
 
-        actualizarContador();
 
-        setInterval(
-            actualizarContador,
-            1000
-        );
+</div>
 
+</section>
 
-        /* =========================
-           FLORES
-        ========================= */
 
-        const flores =
-            document.querySelectorAll(".flor");
+<footer>
 
+<h3>
+Vanessa & Julian
+</h3>
 
-        document.addEventListener(
-            "mousemove",
-            (e) => {
+<p>
+5 de diciembre de 2026
+</p>
 
-                const x =
-                    (window.innerWidth / 2 -
-                    e.clientX) / 40;
+</footer>
 
-                const y =
-                    (window.innerHeight / 2 -
-                    e.clientY) / 40;
 
+<script>
 
-                flores.forEach(
-                    (flor, index) => {
+/* =========================
+   CLOUDINARY
+========================= */
 
-                        const velocidad =
-                            (index + 1) * 0.5;
+const CLOUD_NAME =
+"iob4klqb";
 
+const UPLOAD_PRESET =
+"mwwydesd";
 
-                        flor.style.transform =
-                            `translate(
-                                ${x * velocidad}px,
-                                ${y * velocidad}px
-                            )`;
+const WORKER_URL =
+"https://galeria-boda.n776bkp7jc.workers.dev/gallery";
 
-                    }
-                );
 
-            }
-        );
+/* =========================
+   SUBIR FOTOS
+========================= */
 
-    </script>
+const fotoInput =
+document.getElementById(
+"fotoInput"
+);
+
+const mensaje =
+document.getElementById(
+"mensaje"
+);
+
+
+fotoInput.addEventListener(
+"change",
+async function(){
+
+const archivo =
+this.files[0];
+
+if(!archivo){
+return;
+}
+
+
+if(
+!archivo.type.startsWith("image/")
+){
+
+mensaje.textContent =
+"Selecciona una imagen.";
+
+return;
+
+}
+
+
+mensaje.textContent =
+"Subiendo foto... ⏳";
+
+
+const datos =
+new FormData();
+
+
+datos.append(
+"file",
+archivo
+);
+
+
+datos.append(
+"upload_preset",
+UPLOAD_PRESET
+);
+
+
+try{
+
+const respuesta =
+await fetch(
+
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+{
+method:"POST",
+body:datos
+}
+
+);
+
+
+const resultado =
+await respuesta.json();
+
+
+if(!respuesta.ok){
+
+throw new Error(
+resultado.error?.message ||
+"No se pudo subir."
+);
+
+}
+
+
+mensaje.textContent =
+"¡Foto subida correctamente! 📸❤️";
+
+
+}catch(error){
+
+console.error(error);
+
+mensaje.textContent =
+"No se pudo subir la foto.";
+
+}
+
+});
+
+
+/* =========================
+   GALERÍA
+========================= */
+
+const botonGaleria =
+document.getElementById(
+"cargarGaleria"
+);
+
+const galeriaGrid =
+document.getElementById(
+"galeriaGrid"
+);
+
+const mensajeGaleria =
+document.getElementById(
+"mensajeGaleria"
+);
+
+
+botonGaleria.addEventListener(
+"click",
+async function(){
+
+mensajeGaleria.textContent =
+"Cargando recuerdos... 📸";
+
+galeriaGrid.innerHTML =
+"";
+
+
+try{
+
+const respuesta =
+await fetch(
+
+WORKER_URL,
+
+{
+method:"GET",
+cache:"no-store"
+}
+
+);
+
+
+if(!respuesta.ok){
+
+throw new Error(
+"Error del Worker."
+);
+
+}
+
+
+const datos =
+await respuesta.json();
+
+
+if(
+!datos.images ||
+datos.images.length === 0
+){
+
+mensajeGaleria.textContent =
+"Todavía no hay fotos compartidas. ❤️";
+
+return;
+
+}
+
+
+mensajeGaleria.textContent =
+`${datos.images.length} recuerdo(s) compartido(s) 📸`;
+
+
+datos.images.forEach(
+imagen => {
+
+const img =
+document.createElement(
+"img"
+);
+
+
+img.src =
+imagen.url;
+
+
+img.alt =
+"Recuerdo de Vanessa y Julian";
+
+
+img.loading =
+"lazy";
+
+
+img.onclick =
+function(){
+
+window.open(
+imagen.url,
+"_blank"
+);
+
+};
+
+
+galeriaGrid.appendChild(
+img
+);
+
+});
+
+}catch(error){
+
+console.error(error);
+
+mensajeGaleria.textContent =
+"No se pudo cargar la galería.";
+
+}
+
+});
+
+
+/* =========================
+   CONTADOR
+========================= */
+
+const fechaBoda =
+new Date(
+"December 5, 2026 00:00:00"
+).getTime();
+
+
+function actualizarContador(){
+
+const ahora =
+new Date().getTime();
+
+
+const diferencia =
+fechaBoda - ahora;
+
+
+if(diferencia <= 0){
+
+document.getElementById(
+"dias"
+).textContent = "0";
+
+document.getElementById(
+"horas"
+).textContent = "0";
+
+document.getElementById(
+"minutos"
+).textContent = "0";
+
+document.getElementById(
+"segundos"
+).textContent = "0";
+
+return;
+
+}
+
+
+const dias =
+Math.floor(
+diferencia /
+(1000 * 60 * 60 * 24)
+);
+
+
+const horas =
+Math.floor(
+(diferencia /
+(1000 * 60 * 60)) % 24
+);
+
+
+const minutos =
+Math.floor(
+(diferencia /
+(1000 * 60)) % 60
+);
+
+
+const segundos =
+Math.floor(
+(diferencia / 1000) % 60
+);
+
+
+document.getElementById(
+"dias"
+).textContent =
+dias;
+
+
+document.getElementById(
+"horas"
+).textContent =
+horas;
+
+
+document.getElementById(
+"minutos"
+).textContent =
+minutos;
+
+
+document.getElementById(
+"segundos"
+).textContent =
+segundos;
+
+}
+
+
+actualizarContador();
+
+
+setInterval(
+actualizarContador,
+1000
+);
+
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+const elementos =
+document.querySelectorAll(
+".revelar"
+);
+
+
+const observer =
+new IntersectionObserver(
+
+(entries)=>{
+
+entries.forEach(
+entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add(
+"visible"
+);
+
+}
+
+});
+
+},
+
+{
+threshold:.15
+}
+
+);
+
+
+elementos.forEach(
+elemento =>
+observer.observe(
+elemento
+)
+);
+
+
+/* =========================
+   EFECTO 3D DE LA PORTADA
+========================= */
+
+const portada =
+document.getElementById(
+"portada3D"
+);
+
+
+document.querySelector(
+".portada"
+).addEventListener(
+"mousemove",
+(e)=>{
+
+if(window.innerWidth <= 700){
+return;
+}
+
+
+const x =
+(e.clientX /
+window.innerWidth -
+0.5);
+
+
+const y =
+(e.clientY /
+window.innerHeight -
+0.5);
+
+
+portada.style.transform =
+
+`rotateY(${x * 8}deg)
+ rotateX(${y * -8}deg)`;
+
+});
+
+
+document.querySelector(
+".portada"
+).addEventListener(
+"mouseleave",
+()=>{
+
+portada.style.transform =
+"rotateY(0deg) rotateX(0deg)";
+
+});
+
+
+/* =========================
+   MÚSICA
+========================= */
+
+const musicButton =
+document.getElementById(
+"musicButton"
+);
+
+const musica =
+document.getElementById(
+"musica"
+);
+
+let musicaActiva =
+false;
+
+
+musicButton.addEventListener(
+"click",
+async function(){
+
+if(!musica.src){
+
+alert(
+"Primero agrega tu archivo de música como musica.mp3."
+);
+
+return;
+
+}
+
+
+if(!musicaActiva){
+
+try{
+
+await musica.play();
+
+musicaActiva =
+true;
+
+musicButton.textContent =
+"🔊";
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}else{
+
+musica.pause();
+
+musicaActiva =
+false;
+
+musicButton.textContent =
+"🎵";
+
+}
+
+});
+
+</script>
 
 </body>
 </html>
